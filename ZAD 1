@@ -1,0 +1,119 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+
+        public class Kompleksni
+        {
+            
+            private float Re, Im, M;
+            public void Postavi(float x, float y)
+            {
+                Re = x;
+                Im = y;
+            }
+
+            public void Ispisi()
+            {
+                Console.WriteLine("{0} + {1}i", Re, Im);
+            }
+
+            public void IspisiModul()
+            {
+                Console.WriteLine("{0}", M);
+            }
+
+
+            public void MnoziSkalarom(Kompleksni z, float skalar)
+            {
+                Re = z.Re * skalar;
+                Im = z.Im * skalar;
+            }
+
+            public void PodijeliSkalarom(Kompleksni z, float skalar)
+            {
+                Re = z.Re / skalar;
+                Im = z.Im / skalar;
+            }
+
+            public void Zbroji(Kompleksni z1, Kompleksni z2)
+            {
+                Re = z1.Re + z2.Re;
+                Im = z1.Im + z2.Im;
+            }
+
+            public void Oduzmi(Kompleksni z1, Kompleksni z2)
+            {
+                Re = z1.Re - z2.Re;
+                Im = z1.Im - z2.Im;
+            }
+
+            public void Pomnozi(Kompleksni z1, Kompleksni z2)
+            {
+                Re = z1.Re * z2.Re - z1.Im * z2.Im;
+                Im = z1.Im * z2.Re - z1.Re * z2.Im;
+            }
+
+            public void Podijeli(Kompleksni z1, Kompleksni z2)
+            {
+                Re = (z1.Re * z2.Re + z1.Im * z2.Im) / ((float)Math.Pow(z2.Re, 2) + (float)Math.Pow(z2.Im, 2));
+                Im = (z1.Im * z2.Re - z1.Re * z2.Im) / ((float)Math.Pow(z2.Re, 2) + (float)Math.Pow(z2.Im, 2));
+            }
+
+            public void Modul(Kompleksni z)
+            {
+                M = (float)Math.Sqrt(((float)Math.Pow(z.Re, 2) + (float)Math.Pow(z.Im, 2)));
+            }
+        }
+
+
+        static void Main(string[] args)
+        {
+            Kompleksni Kom1 = new Kompleksni();
+            Kompleksni Kom2 = new Kompleksni();
+            Kompleksni Kom3 = new Kompleksni();
+            Kompleksni Kom4 = new Kompleksni();
+            Kompleksni Kom5 = new Kompleksni();
+            Kompleksni Kom6 = new Kompleksni();
+            
+           
+            Kom1.Postavi(12, 15);
+            Kom2.Postavi(3, 9);
+
+            
+            Console.WriteLine("Kompleksni broj 1:");
+            Kom1.Ispisi();
+            Console.WriteLine("Kompleksni broj 2:");
+            Kom2.Ispisi();
+
+            Console.WriteLine("Kompleksni broj 2 pomnozen s 3:");
+            Kom3.MnoziSkalarom(Kom2, 3);
+            Kom3.Ispisi();
+
+            Console.WriteLine("Kompleksni broj 2 podjeljen s 3:");
+            Kom4.PodijeliSkalarom(Kom2, 3);
+            Kom4.Ispisi();
+
+            Console.WriteLine("Kompleksni broj 1+2:");
+            Kom5.Zbroji(Kom1, Kom2);
+            Kom5.Ispisi();
+
+            Console.WriteLine("Kompleksni broj 1-2:");
+            Kom6.Oduzmi(Kom1, Kom2);
+            Kom6.Ispisi();
+
+            Console.WriteLine("modul");
+            Kom2.Modul(Kom2);
+            Kom2.IspisiModul();
+
+
+            Console.ReadLine();
+        }
+    }
+}
