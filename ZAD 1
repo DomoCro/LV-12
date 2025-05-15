@@ -1,119 +1,103 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+#include <stdlib.h>
+#include <stdio.h>
+#include "header.h"
 
-namespace ConsoleApplication1
-{
-    class Program
-    {
+STUDENT* createSLLList(void){
+    STUDENT* headnode = (STUDENT*)calloc(1,sizeof(STUDENT));
+    if(headnode == NULL){
+        return NULL;
+    } else {
+        inputNodeData(headnode);
+        headnode->nextNode = NULL;
+    }
+    return headnode;
+}
 
-        public class Kompleksni
-        {
-            
-            private float Re, Im, M;
-            public void Postavi(float x, float y)
-            {
-                Re = x;
-                Im = y;
-            }
+STUDENT* insertNewNodeSLLList(STUDENT* headnode){
+    STUDENT* newheadNode = (STUDENT*)calloc(1,sizeof(STUDENT));
+    if(newheadNode == NULL){
+        return NULL;
+    } else {
+        inputNodeData(newheadNode);
+        newheadNode->nextNode = headnode;
+    }
+    return newheadNode;
+}
 
-            public void Ispisi()
-            {
-                Console.WriteLine("{0} + {1}i", Re, Im);
-            }
+void inputNodeData(STUDENT* headnode){
+    headnode->ime = (char*)calloc(30,sizeof(char));
+    headnode->prezime = (char*)calloc(30,sizeof(char));
+    scanf("%d", &headnode->id);
+    scanf("%s", headnode->ime);
+    scanf("%s", headnode->prezime);
+    scanf("%f", &headnode->prosjek);
+}
 
-            public void IspisiModul()
-            {
-                Console.WriteLine("{0}", M);
-            }
+void traverseSLLList(STUDENT* traverseNode){
+    if(traverseNode == NULL){
+        exit(EXIT_FAILURE);
+    }
+    while(traverseNode != NULL){
+        printf("%d %s %s %.2f\n", traverseNode->id, traverseNode->ime, traverseNode->prezime, traverseNode->prosjek);
+        traverseNode = traverseNode->nextNode;
+    }
+}
 
+float prosjekSvih(STUDENT* headnode){
+    float ukupanProsjek = 0;
+    int brojac = 0;
 
-            public void MnoziSkalarom(Kompleksni z, float skalar)
-            {
-                Re = z.Re * skalar;
-                Im = z.Im * skalar;
-            }
+    while(headnode){
+        brojac++;
+        ukupanProsjek += headnode->prosjek;
+        headnode = headnode->nextNode;
+    }
+    return ukupanProsjek/brojac;
+}
 
-            public void PodijeliSkalarom(Kompleksni z, float skalar)
-            {
-                Re = z.Re / skalar;
-                Im = z.Im / skalar;
-            }
-
-            public void Zbroji(Kompleksni z1, Kompleksni z2)
-            {
-                Re = z1.Re + z2.Re;
-                Im = z1.Im + z2.Im;
-            }
-
-            public void Oduzmi(Kompleksni z1, Kompleksni z2)
-            {
-                Re = z1.Re - z2.Re;
-                Im = z1.Im - z2.Im;
-            }
-
-            public void Pomnozi(Kompleksni z1, Kompleksni z2)
-            {
-                Re = z1.Re * z2.Re - z1.Im * z2.Im;
-                Im = z1.Im * z2.Re - z1.Re * z2.Im;
-            }
-
-            public void Podijeli(Kompleksni z1, Kompleksni z2)
-            {
-                Re = (z1.Re * z2.Re + z1.Im * z2.Im) / ((float)Math.Pow(z2.Re, 2) + (float)Math.Pow(z2.Im, 2));
-                Im = (z1.Im * z2.Re - z1.Re * z2.Im) / ((float)Math.Pow(z2.Re, 2) + (float)Math.Pow(z2.Im, 2));
-            }
-
-            public void Modul(Kompleksni z)
-            {
-                M = (float)Math.Sqrt(((float)Math.Pow(z.Re, 2) + (float)Math.Pow(z.Im, 2)));
-            }
+STUDENT* searchSLLList(STUDENT* headnode, int x){
+    while(headnode){
+        if(headnode->id == x){
+            return headnode;
         }
+        headnode = headnode->nextNode;
+    }
+    return NULL;
+}
 
-
-        static void Main(string[] args)
-        {
-            Kompleksni Kom1 = new Kompleksni();
-            Kompleksni Kom2 = new Kompleksni();
-            Kompleksni Kom3 = new Kompleksni();
-            Kompleksni Kom4 = new Kompleksni();
-            Kompleksni Kom5 = new Kompleksni();
-            Kompleksni Kom6 = new Kompleksni();
-            
-           
-            Kom1.Postavi(12, 15);
-            Kom2.Postavi(3, 9);
-
-            
-            Console.WriteLine("Kompleksni broj 1:");
-            Kom1.Ispisi();
-            Console.WriteLine("Kompleksni broj 2:");
-            Kom2.Ispisi();
-
-            Console.WriteLine("Kompleksni broj 2 pomnozen s 3:");
-            Kom3.MnoziSkalarom(Kom2, 3);
-            Kom3.Ispisi();
-
-            Console.WriteLine("Kompleksni broj 2 podjeljen s 3:");
-            Kom4.PodijeliSkalarom(Kom2, 3);
-            Kom4.Ispisi();
-
-            Console.WriteLine("Kompleksni broj 1+2:");
-            Kom5.Zbroji(Kom1, Kom2);
-            Kom5.Ispisi();
-
-            Console.WriteLine("Kompleksni broj 1-2:");
-            Kom6.Oduzmi(Kom1, Kom2);
-            Kom6.Ispisi();
-
-            Console.WriteLine("modul");
-            Kom2.Modul(Kom2);
-            Kom2.IspisiModul();
-
-
-            Console.ReadLine();
+void deleteNodeSLLList(STUDENT** headnode, STUDENT* targetNode){
+    if(targetNode == NULL){
+        printf("Ne postoji cvor za brisanje %p\n", targetNode);
+        return;
+    }
+    if(*headnode == targetNode){
+        *headnode = (*headnode)->nextNode;
+        free(targetNode->ime);
+        free(targetNode->prezime);
+        free(targetNode);
+    } else {
+        STUDENT* traverseNode = *headnode;
+        while(traverseNode->nextNode){
+            if(traverseNode->nextNode == targetNode){
+                traverseNode->nextNode = targetNode->nextNode;
+                free(targetNode->ime);
+                free(targetNode->prezime);
+                free(targetNode);
+                break;
+            }
+            traverseNode = traverseNode->nextNode;
         }
     }
+}
+
+STUDENT* deleteWholeSLLList(STUDENT* traverseNode){
+    STUDENT* deleteNode = NULL;
+    while(traverseNode != NULL){
+        deleteNode = traverseNode;
+        traverseNode = traverseNode->nextNode;
+        free(deleteNode->ime);
+        free(deleteNode->prezime);
+        free(deleteNode);
+    }
+    return NULL;
 }
